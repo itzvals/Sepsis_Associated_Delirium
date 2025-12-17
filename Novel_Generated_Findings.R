@@ -426,7 +426,7 @@ Fig1 <- ggplot(risk_summary, aes(x = risk_group, y = Observed_SAD_rate, fill = r
   scale_fill_brewer(palette = "YlOrRd") +
   labs(
     title = "Observed Delirium Risk Across Model-Predicted Risk Groups",
-    x = "Predicted Risk Group (XGBoost)",
+    x = "Predicted Risk Group",
     y = "Observed SAD Incidence"
   ) +
   theme_bw(base_size = 14) +
@@ -485,7 +485,7 @@ Fig2 <- ggplot(calib_summary, aes(x = Mean_predicted_risk, y = Observed_risk)) +
   labs(
     title = "Calibration Plot for Weighted XGBoost Model",
     x = "Mean Predicted Probability",
-    y = "Observed Probability"
+    y = "Actual Probability"
   ) +
   theme_bw(base_size = 14) +
   theme(
@@ -744,7 +744,11 @@ eval_conformal <- function(y, p, qhat) {
   )
 }
 
-# Prepare evaluation dataframe
+#########################################################################################################
+# NOVEL METHOD 5: DISTRIBUTION SHIFT ANALYSIS
+#########################################################################################################
+
+# Prepare dataframe
 y_test_int <- as.integer(test$sad_binary)
 p_test_num <- as.numeric(xgb_pred_prob)
 
@@ -777,7 +781,7 @@ col_SOFA <- pick_col(eval_df, c("sofa_total", "SOFA", "sofa", "sofa_score"))
 col_MV   <- pick_col(eval_df, c("ventilated", "MV", "mech_vent", "ventilation"))
 col_SED  <- pick_col(eval_df, c("any_sedative_used", "sedation", "sedative"))
 
-cat("\n📊 Identified columns for distribution shifts:\n")
+cat("\n Identified columns for distribution shifts:\n")
 if (!is.null(col_SOFA)) cat(sprintf("   SOFA: %s\n", col_SOFA))
 if (!is.null(col_MV)) cat(sprintf("   Mechanical ventilation: %s\n", col_MV))
 if (!is.null(col_SED)) cat(sprintf("   Sedation: %s\n", col_SED))
