@@ -386,7 +386,7 @@ print(roc_plot)
 ggsave("Figure_Novel_weighted_models_ROC.png", roc_plot, width = 8, height = 6, dpi = 300)
 
 #########################################################################################################
-# NOVEL 1: RISK STRATIFICATION 
+# RISK STRATIFICATION 
 #########################################################################################################
 
 # Using best model: XGBoost
@@ -441,7 +441,7 @@ print(Fig1)
 ggsave("Figure_Novel1_barplot.png", Fig1, width = 8, height = 6, dpi = 300)
 
 #########################################################################################################
-# NOVEL 2:  CALIBRATION ANALYSIS 
+# CALIBRATION ANALYSIS 
 #########################################################################################################
 
 calib_df <- data.frame(
@@ -719,7 +719,7 @@ ece_score <- function(y, p, n_bins = 10) {
 # AUROC
 auroc <- function(y, p) as.numeric(auc(roc(y, p, quiet = TRUE)))
 
-# Nonconformity for binary (label-conditional style)
+# Nonconformity for binary 
 nonconformity <- function(y, p) ifelse(y == 1, 1 - p, p)
 
 # Quantile used in split conformal
@@ -762,7 +762,8 @@ evl_idx_shift  <- setdiff(seq_len(n), cal_idx_shift)
 df_cal <- eval_df[cal_idx_shift, ]
 df_evl <- eval_df[evl_idx_shift, ]
 
-alpha_shift <- 0.10   # 90% target marginal coverage
+# 90% target marginal coverage
+alpha_shift <- 0.10   
 
 s_cal_shift <- nonconformity(df_cal$y, df_cal$p)
 qhat_global <- conformal_qhat(s_cal_shift, alpha_shift)
@@ -809,7 +810,7 @@ if (!is.null(col_SED)) {
 # Always include baseline
 shifts[["Baseline (all eval)"]] <- function(d) rep(TRUE, nrow(d))
 
-cat("\n📊 Defined distribution shifts:\n")
+cat("\n Defined distribution shifts:\n")
 for (sname in names(shifts)) {
   cat(sprintf("   - %s\n", sname))
 }
@@ -884,7 +885,7 @@ shift_report <- do.call(rbind, results)
 cat("\n Distribution Shift Analysis Results:\n")
 print(shift_report)
 
-# Save results
+# Save 
 write.csv(shift_report, "distribution_shift_analysis.csv", row.names = FALSE)
 cat("Saved: distribution_shift_analysis.csv\n")
 
@@ -909,7 +910,7 @@ plot_df$Metric <- factor(
   )
 )
 
-# ---- Safely recode Shift labels (NO factor yet) ----
+# Shift labels
 plot_df$Shift <- dplyr::recode(
   plot_df$Shift,
   "Baseline (all eval)"                = "All Patients",
@@ -918,7 +919,7 @@ plot_df$Shift <- dplyr::recode(
   "High severity (SOFA Q4)"             = "High Severity"
 )
 
-# ---- Now set legend order ONCE ----
+# Legend order 
 plot_df$Shift <- factor(
   plot_df$Shift,
   levels = c(
@@ -929,7 +930,7 @@ plot_df$Shift <- factor(
   )
 )
 
-# ---- Define colors (must match final labels) ----
+# Add colors
 shift_colors <- c(
   "Sedated"                 = "#F28E2B",
   "Mechanically Ventilated" = "#59A14F",
@@ -937,7 +938,7 @@ shift_colors <- c(
   "All Patients"            = "#4E79A7"
 )
 
-# ---- Create visualization ----
+# Plot
 shift_plot <- ggplot(plot_df, aes(x = Shift, y = Value, fill = Shift)) +
   geom_col(width = 0.6) +
   facet_wrap(
@@ -975,7 +976,7 @@ shift_plot <- ggplot(plot_df, aes(x = Shift, y = Value, fill = Shift)) +
   )
 
 print(shift_plot)
-
+# Save
 ggsave(
   "Figure_Novel5_distribution_shifts.png", shift_plot, width = 16,
   height = 6, dpi = 300)
