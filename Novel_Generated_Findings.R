@@ -378,7 +378,7 @@ roc_plot <- ggplot(roc_df, aes(x = FPR, y = TPR, color = Model)) +
   theme(
     plot.title = element_text(hjust = 0.5),   
     legend.position = c(0.70, 0.25),
-    legend.background = element_rect(fill = "white", color = "white", linewidth = 0.5),  # ✅ Changed border to black
+    legend.background = element_rect(fill = "white", color = "white", linewidth = 0.5), 
     legend.text = element_text(size = 9),
     legend.key.width = unit(1.2, "lines"),
     panel.grid.minor = element_blank(),
