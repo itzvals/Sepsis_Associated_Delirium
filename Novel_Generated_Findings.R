@@ -348,6 +348,12 @@ model_colors <- c(
   "KNN"                 = "#A65628"
 )
 
+# Create named vector for legend labels with AUC values
+legend_labels <- setNames(
+  unique(roc_df$Model_Label[match(names(model_colors), roc_df$Model)]),
+  names(model_colors)
+)
+
 # Plot
 roc_plot <- ggplot(roc_df, aes(x = FPR, y = TPR, color = Model)) +
   geom_line(linewidth = 1.2) +
@@ -359,7 +365,8 @@ roc_plot <- ggplot(roc_df, aes(x = FPR, y = TPR, color = Model)) +
   ) +
   scale_color_manual(
     values = model_colors,
-    name = "Model"
+    labels = legend_labels,  
+    name = NULL              
   ) +
   coord_equal() +
   labs(
@@ -370,9 +377,8 @@ roc_plot <- ggplot(roc_df, aes(x = FPR, y = TPR, color = Model)) +
   theme_bw(base_size = 14) +
   theme(
     plot.title = element_text(hjust = 0.5),   
-    legend.position = c(0.75, 0.25),
-    legend.background = element_rect(fill = "white", color = "white", linewidth = 0.5),
-    legend.title = element_blank(),  
+    legend.position = c(0.70, 0.25),
+    legend.background = element_rect(fill = "white", color = "white", linewidth = 0.5),  # ✅ Changed border to black
     legend.text = element_text(size = 9),
     legend.key.width = unit(1.2, "lines"),
     panel.grid.minor = element_blank(),
